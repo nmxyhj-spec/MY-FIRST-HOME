@@ -1,260 +1,609 @@
-import React, { useState } from 'react';
-import { TrendingUp, Clock, BookOpen, ChevronRight, Menu, X } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>경제알리미 - 청년을 위한 경제뉴스</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-export default function EconomyNewsHub() {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+            line-height: 1.6;
+            color: #111;
+            background: #fff;
+        }
 
-  const categories = [
-    { id: 'all', name: '전체' },
-    { id: 'market', name: '증시·금융' },
-    { id: 'policy', name: '정책·제도' },
-    { id: 'global', name: '글로벌' },
-    { id: 'tech', name: '테크·산업' }
-  ];
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-  const newsArticles = [
-    {
-      id: 1,
-      category: 'market',
-      title: '코스피, 외국인 매수에 2,600선 회복…반도체주 강세',
-      summary: '코스피 지수가 외국인 투자자들의 대규모 순매수에 힘입어 2,600선을 회복했습니다. 특히 반도체 업종이 강세를 보이며 상승을 주도했습니다.',
-      source: '한국경제',
-      time: '2시간 전',
-      image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80'
-    },
-    {
-      id: 2,
-      category: 'policy',
-      title: '정부, 청년 주택 구입 지원금 최대 5천만원으로 확대',
-      summary: '정부가 청년층의 주거 안정을 위해 생애 최초 주택 구입 시 지원금을 기존 3천만원에서 5천만원으로 상향 조정하는 방안을 추진합니다.',
-      source: '연합뉴스',
-      time: '4시간 전',
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80'
-    },
-    {
-      id: 3,
-      category: 'global',
-      title: '미 연준, 기준금리 동결…"인플레이션 추이 지켜볼 것"',
-      summary: '미국 연방준비제도가 기준금리를 현 수준에서 동결했습니다. 제롬 파월 의장은 인플레이션 지표를 면밀히 관찰하겠다고 밝혔습니다.',
-      source: '매일경제',
-      time: '6시간 전',
-      image: 'https://images.unsplash.com/photo-1611095790444-1dfa35e37b52?w=800&q=80'
-    },
-    {
-      id: 4,
-      category: 'tech',
-      title: 'AI 반도체 시장 급성장…2025년 1,000억 달러 돌파 전망',
-      summary: '인공지능 반도체 시장이 빠르게 성장하며 올해 시장 규모가 1,000억 달러를 넘어설 것으로 예상됩니다. 국내 기업들의 경쟁력 강화가 주목받고 있습니다.',
-      source: '서울경제',
-      time: '8시간 전',
-      image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80'
-    },
-    {
-      id: 5,
-      category: 'market',
-      title: '원·달러 환율 1,350원 후반…수출 기업 실적 개선 기대',
-      summary: '원·달러 환율이 1,350원 후반대에서 안정세를 보이며 수출 기업들의 실적 개선이 기대되고 있습니다.',
-      source: '이데일리',
-      time: '10시간 전',
-      image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80'
-    },
-    {
-      id: 6,
-      category: 'policy',
-      title: '최저임금 1만원 시대…내년 시급 10,030원 확정',
-      summary: '2026년 최저임금이 시간당 10,030원으로 결정되며 처음으로 1만원 시대를 맞이합니다. 전년 대비 3.8% 인상된 수치입니다.',
-      source: '한겨레',
-      time: '12시간 전',
-      image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&q=80'
-    }
-  ];
+        /* Header */
+        header {
+            border-bottom: 1px solid #e5e5e5;
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 100;
+        }
 
-  const filteredNews = selectedCategory === 'all' 
-    ? newsArticles 
-    : newsArticles.filter(article => article.category === selectedCategory);
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
 
-  const featuredArticle = newsArticles[0];
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #111;
+            text-decoration: none;
+        }
 
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="border-b border-gray-200 sticky top-0 bg-white z-50">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-7 h-7 text-gray-900" />
-              <h1 className="text-2xl font-bold text-gray-900">경제알리미</h1>
+        nav {
+            display: flex;
+            gap: 40px;
+        }
+
+        nav a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #111;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin: 60px 0;
+        }
+
+        .hero-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .featured-card {
+            background: #f8f8f8;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+        }
+
+        .featured-card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .featured-image {
+            width: 40%;
+            min-height: 320px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .featured-content {
+            padding: 40px;
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: #111;
+            color: #fff;
+            font-size: 12px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            width: fit-content;
+        }
+
+        .featured-title {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 16px;
+            color: #111;
+        }
+
+        .featured-summary {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .meta {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* Category Filter */
+        .categories {
+            display: flex;
+            gap: 12px;
+            margin: 60px 0 40px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .categories::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .categories::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 2px;
+        }
+
+        .category-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 25px;
+            background: #f0f0f0;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .category-btn:hover {
+            background: #e5e5e5;
+        }
+
+        .category-btn.active {
+            background: #111;
+            color: #fff;
+        }
+
+        /* News Grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .news-card {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .news-card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .news-content {
+            padding: 24px;
+        }
+
+        .news-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #f0f0f0;
+            color: #666;
+            font-size: 11px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .news-title {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            color: #111;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .news-summary {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Learning Section */
+        .learning-section {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 50px;
+            margin-bottom: 80px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .learning-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .learning-card {
+            background: #fff;
+            padding: 28px;
+            border-radius: 8px;
+            border: 1px solid #e5e5e5;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .learning-card:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+        }
+
+        .learning-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #111;
+        }
+
+        .learning-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .learn-more {
+            font-size: 14px;
+            color: #111;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid #e5e5e5;
+            background: #f8f8f8;
+            padding: 40px 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-links a {
+            font-size: 14px;
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #111;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .featured-card {
+                flex-direction: column;
+            }
+
+            .featured-image {
+                width: 100%;
+                height: 250px;
+            }
+
+            .featured-content {
+                width: 100%;
+                padding: 30px 24px;
+            }
+
+            .featured-title {
+                font-size: 22px;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .learning-section {
+                padding: 30px 24px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                        <polyline points="17 6 23 6 23 12"></polyline>
+                    </svg>
+                    경제알리미
+                </a>
+                <nav>
+                    <a href="#">홈</a>
+                    <a href="#">뉴스</a>
+                    <a href="#">학습</a>
+                    <a href="#">용어사전</a>
+                </nav>
+                <button class="mobile-menu-btn">☰</button>
             </div>
-            
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-8">
-              <a href="#" className="text-sm text-gray-700 hover:text-gray-900">홈</a>
-              <a href="#" className="text-sm text-gray-700 hover:text-gray-900">뉴스</a>
-              <a href="#" className="text-sm text-gray-700 hover:text-gray-900">학습</a>
-              <a href="#" className="text-sm text-gray-700 hover:text-gray-900">용어사전</a>
-            </nav>
-
-            {/* Mobile Menu Button */}
-            <button 
-              className="md:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-
-          {/* Mobile Menu */}
-          {mobileMenuOpen && (
-            <nav className="md:hidden mt-4 pb-4 flex flex-col gap-3">
-              <a href="#" className="text-sm text-gray-700">홈</a>
-              <a href="#" className="text-sm text-gray-700">뉴스</a>
-              <a href="#" className="text-sm text-gray-700">학습</a>
-              <a href="#" className="text-sm text-gray-700">용어사전</a>
-            </nav>
-          )}
         </div>
-      </header>
+    </header>
 
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <section className="mb-12">
-          <h2 className="text-sm font-medium text-gray-500 mb-2">TODAY'S HEADLINE</h2>
-          <div className="bg-gray-50 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-            <div className="md:flex">
-              <div className="md:w-2/5">
-                <img 
-                  src={featuredArticle.image} 
-                  alt={featuredArticle.title}
-                  className="w-full h-64 md:h-full object-cover"
-                />
-              </div>
-              <div className="p-6 md:w-3/5 flex flex-col justify-center">
-                <span className="inline-block px-3 py-1 bg-gray-900 text-white text-xs rounded-full w-fit mb-3">
-                  주요뉴스
-                </span>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3 leading-tight">
-                  {featuredArticle.title}
-                </h3>
-                <p className="text-gray-600 mb-4 leading-relaxed">
-                  {featuredArticle.summary}
-                </p>
-                <div className="flex items-center gap-4 text-sm text-gray-500">
-                  <span>{featuredArticle.source}</span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    {featuredArticle.time}
-                  </span>
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-label">TODAY'S HEADLINE</div>
+            <div class="featured-card" onclick="window.open('https://www.sedaily.com', '_blank')">
+                <div class="featured-image" style="background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80')"></div>
+                <div class="featured-content">
+                    <span class="badge">주요뉴스</span>
+                    <h2 class="featured-title">코스피 4000선 돌파 '신기록'…코스닥도 900선 탈환</h2>
+                    <p class="featured-summary">코스피가 사상 처음으로 4000선을 돌파하며 새 역사를 썼습니다. 삼성전자와 SK하이닉스 등 반도체주 강세와 외국인 매수세가 이어지며 올해 누적 상승률 66%로 세계 1위를 기록했습니다.</p>
+                    <div class="meta">
+                        <span>서울경제</span>
+                        <span>⏱ 1시간 전</span>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </section>
 
-        {/* Category Filter */}
-        <section className="mb-8">
-          <div className="flex gap-3 overflow-x-auto pb-2">
-            {categories.map(category => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                  selectedCategory === category.id
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {category.name}
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* News Grid */}
+        <!-- Category Filter -->
         <section>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredNews.slice(1).map(article => (
-              <article 
-                key={article.id}
-                className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-              >
-                <img 
-                  src={article.image} 
-                  alt={article.title}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-5">
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded mb-3">
-                    {categories.find(c => c.id === article.category)?.name}
-                  </span>
-                  <h4 className="font-bold text-gray-900 mb-2 leading-snug line-clamp-2">
-                    {article.title}
-                  </h4>
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                    {article.summary}
-                  </p>
-                  <div className="flex items-center justify-between text-xs text-gray-500">
-                    <span>{article.source}</span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {article.time}
-                    </span>
-                  </div>
+            <div class="categories">
+                <button class="category-btn active" onclick="filterNews('all')">전체</button>
+                <button class="category-btn" onclick="filterNews('market')">증시·금융</button>
+                <button class="category-btn" onclick="filterNews('policy')">정책·제도</button>
+                <button class="category-btn" onclick="filterNews('global')">글로벌</button>
+                <button class="category-btn" onclick="filterNews('tech')">테크·산업</button>
+            </div>
+        </section>
+
+        <!-- News Grid -->
+        <section>
+            <div class="news-grid" id="newsGrid">
+                <article class="news-card" data-category="market">
+                    <div class="news-image" style="background-image: url('https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80')"></div>
+                    <div class="news-content">
+                        <span class="news-category">증시·금융</span>
+                        <h3 class="news-title">3분기 GDP 성장률 1.2%…소비·투자·수출 모두 증가</h3>
+                        <p class="news-summary">올해 3분기 실질 GDP가 전기 대비 1.2% 증가하며 1년 6개월 만에 최고치를 기록했습니다. 민간소비와 설비투자가 회복세를 보이며 성장을 견인했습니다.</p>
+                        <div class="news-meta">
+                            <span>한국은행</span>
+                            <span>⏱ 3시간 전</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card" data-category="policy">
+                    <div class="news-image" style="background-image: url('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&q=80')"></div>
+                    <div class="news-content">
+                        <span class="news-category">정책·제도</span>
+                        <h3 class="news-title">2026년 최저임금 10,320원 확정…17년 만에 노사 합의</h3>
+                        <p class="news-summary">2026년 최저임금이 시간당 10,320원으로 결정됐습니다. 올해 대비 2.9% 인상됐으며, 2008년 이후 17년 만에 노사 합의로 이뤄졌습니다.</p>
+                        <div class="news-meta">
+                            <span>노동법률</span>
+                            <span>⏱ 5시간 전</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card" data-category="tech">
+                    <div class="news-image" style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80')"></div>
+                    <div class="news-content">
+                        <span class="news-category">테크·산업</span>
+                        <h3 class="news-title">반도체 투톱 시총 1천조…SK하이닉스 50만원 돌파</h3>
+                        <p class="news-summary">SK하이닉스가 50만원을 넘어서며 삼성전자와 SK하이닉스의 합산 시가총액이 1천조원을 돌파했습니다. 메모리 반도체 공급 부족에 상승세가 지속되고 있습니다.</p>
+                        <div class="news-meta">
+                            <span>한국경제TV</span>
+                            <span>⏱ 7시간 전</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card" data-category="global">
+                    <div class="news-image" style="background-image: url('https://images.unsplash.com/photo-1611095790444-1dfa35e37b52?w=800&q=80')"></div>
+                    <div class="news-content">
+                        <span class="news-category">글로벌</span>
+                        <h3 class="news-title">S&P500 15% 오를 때 코스피 64%↑…세계 증시 압도</h3>
+                        <p class="news-summary">올해 코스피 상승률이 64%로 세계 주요 증시를 압도하고 있습니다. S&P500(15%), 독일 DAX(22%), 일본 닛케이(24%)를 크게 웃도는 성과입니다.</p>
+                        <div class="news-meta">
+                            <span>한국경제</span>
+                            <span>⏱ 9시간 전</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card" data-category="market">
+                    <div class="news-image" style="background-image: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80')"></div>
+                    <div class="news-content">
+                        <span class="news-category">증시·금융</span>
+                        <h3 class="news-title">지주사주 만년 저평가 탈출…HD현대·한화 52주 신고가</h3>
+                        <p class="news-summary">지주사 주가가 최고가 행진을 이어가고 있습니다. 지배구조 개선 기대감과 자회사 기업가치 상승이 맞물린 결과로 분석됩니다.</p>
+                        <div class="news-meta">
+                            <span>한국경제</span>
+                            <span>⏱ 11시간 전</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Learning Section -->
+        <section class="learning-section">
+            <div class="section-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                <h2 class="section-title">경제 용어 학습</h2>
+            </div>
+            <div class="learning-grid">
+                <div class="learning-card">
+                    <h3 class="learning-title">기준금리란?</h3>
+                    <p class="learning-desc">중앙은행이 금융기관과 거래할 때 적용하는 기준이 되는 금리입니다. 경제 전반의 금리 수준에 영향을 미칩니다.</p>
+                    <div class="learn-more">자세히 보기 →</div>
                 </div>
-              </article>
-            ))}
-          </div>
+                <div class="learning-card">
+                    <h3 class="learning-title">인플레이션</h3>
+                    <p class="learning-desc">물가가 지속적으로 상승하여 화폐 가치가 하락하는 경제 현상입니다. 소비자의 구매력에 직접적인 영향을 줍니다.</p>
+                    <div class="learn-more">자세히 보기 →</div>
+                </div>
+                <div class="learning-card">
+                    <h3 class="learning-title">GDP</h3>
+                    <p class="learning-desc">국내총생산으로, 일정 기간 국내에서 생산된 모든 재화와 서비스의 가치입니다. 국가 경제 규모를 나타냅니다.</p>
+                    <div class="learn-more">자세히 보기 →</div>
+                </div>
+            </div>
         </section>
+    </main>
 
-        {/* Learning Section */}
-        <section className="mt-16 bg-gray-50 rounded-lg p-8">
-          <div className="flex items-center gap-2 mb-6">
-            <BookOpen className="w-6 h-6 text-gray-900" />
-            <h3 className="text-xl font-bold text-gray-900">경제 용어 학습</h3>
-          </div>
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="bg-white p-5 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
-              <h4 className="font-bold text-gray-900 mb-2">기준금리란?</h4>
-              <p className="text-sm text-gray-600 mb-3">중앙은행이 금융기관과 거래할 때 적용하는 기준이 되는 금리입니다.</p>
-              <div className="flex items-center text-sm text-gray-900 font-medium">
-                자세히 보기 <ChevronRight className="w-4 h-4 ml-1" />
-              </div>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                        <polyline points="17 6 23 6 23 12"></polyline>
+                    </svg>
+                    <span>© 2025 경제알리미. All rights reserved.</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#">이용약관</a>
+                    <a href="#">개인정보처리방침</a>
+                    <a href="#">문의하기</a>
+                </div>
             </div>
-            <div className="bg-white p-5 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
-              <h4 className="font-bold text-gray-900 mb-2">인플레이션</h4>
-              <p className="text-sm text-gray-600 mb-3">물가가 지속적으로 상승하여 화폐 가치가 하락하는 경제 현상입니다.</p>
-              <div className="flex items-center text-sm text-gray-900 font-medium">
-                자세히 보기 <ChevronRight className="w-4 h-4 ml-1" />
-              </div>
-            </div>
-            <div className="bg-white p-5 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
-              <h4 className="font-bold text-gray-900 mb-2">GDP</h4>
-              <p className="text-sm text-gray-600 mb-3">국내총생산으로, 일정 기간 국내에서 생산된 모든 재화와 서비스의 가치입니다.</p>
-              <div className="flex items-center text-sm text-gray-900 font-medium">
-                자세히 보기 <ChevronRight className="w-4 h-4 ml-1" />
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-gray-200 mt-16 py-8 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-gray-600" />
-              <span className="text-sm text-gray-600">© 2025 경제알리미. All rights reserved.</span>
-            </div>
-            <div className="flex gap-6 text-sm text-gray-600">
-              <a href="#" className="hover:text-gray-900">이용약관</a>
-              <a href="#" className="hover:text-gray-900">개인정보처리방침</a>
-              <a href="#" className="hover:text-gray-900">문의하기</a>
-            </div>
-          </div>
         </div>
-      </footer>
-    </div>
-  );
-}
+    </footer>
+
+    <script>
+        function filterNews(category) {
+            const cards = document.querySelectorAll('.news-card');
+            const buttons = document.querySelectorAll('.category-btn');
+            
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter cards
+            cards.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    if (card.dataset.category === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
