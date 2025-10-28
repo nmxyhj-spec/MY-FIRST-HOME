@@ -1,0 +1,260 @@
+import React, { useState } from 'react';
+import { TrendingUp, Clock, BookOpen, ChevronRight, Menu, X } from 'lucide-react';
+
+export default function EconomyNewsHub() {
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const categories = [
+    { id: 'all', name: '전체' },
+    { id: 'market', name: '증시·금융' },
+    { id: 'policy', name: '정책·제도' },
+    { id: 'global', name: '글로벌' },
+    { id: 'tech', name: '테크·산업' }
+  ];
+
+  const newsArticles = [
+    {
+      id: 1,
+      category: 'market',
+      title: '코스피, 외국인 매수에 2,600선 회복…반도체주 강세',
+      summary: '코스피 지수가 외국인 투자자들의 대규모 순매수에 힘입어 2,600선을 회복했습니다. 특히 반도체 업종이 강세를 보이며 상승을 주도했습니다.',
+      source: '한국경제',
+      time: '2시간 전',
+      image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80'
+    },
+    {
+      id: 2,
+      category: 'policy',
+      title: '정부, 청년 주택 구입 지원금 최대 5천만원으로 확대',
+      summary: '정부가 청년층의 주거 안정을 위해 생애 최초 주택 구입 시 지원금을 기존 3천만원에서 5천만원으로 상향 조정하는 방안을 추진합니다.',
+      source: '연합뉴스',
+      time: '4시간 전',
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80'
+    },
+    {
+      id: 3,
+      category: 'global',
+      title: '미 연준, 기준금리 동결…"인플레이션 추이 지켜볼 것"',
+      summary: '미국 연방준비제도가 기준금리를 현 수준에서 동결했습니다. 제롬 파월 의장은 인플레이션 지표를 면밀히 관찰하겠다고 밝혔습니다.',
+      source: '매일경제',
+      time: '6시간 전',
+      image: 'https://images.unsplash.com/photo-1611095790444-1dfa35e37b52?w=800&q=80'
+    },
+    {
+      id: 4,
+      category: 'tech',
+      title: 'AI 반도체 시장 급성장…2025년 1,000억 달러 돌파 전망',
+      summary: '인공지능 반도체 시장이 빠르게 성장하며 올해 시장 규모가 1,000억 달러를 넘어설 것으로 예상됩니다. 국내 기업들의 경쟁력 강화가 주목받고 있습니다.',
+      source: '서울경제',
+      time: '8시간 전',
+      image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80'
+    },
+    {
+      id: 5,
+      category: 'market',
+      title: '원·달러 환율 1,350원 후반…수출 기업 실적 개선 기대',
+      summary: '원·달러 환율이 1,350원 후반대에서 안정세를 보이며 수출 기업들의 실적 개선이 기대되고 있습니다.',
+      source: '이데일리',
+      time: '10시간 전',
+      image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80'
+    },
+    {
+      id: 6,
+      category: 'policy',
+      title: '최저임금 1만원 시대…내년 시급 10,030원 확정',
+      summary: '2026년 최저임금이 시간당 10,030원으로 결정되며 처음으로 1만원 시대를 맞이합니다. 전년 대비 3.8% 인상된 수치입니다.',
+      source: '한겨레',
+      time: '12시간 전',
+      image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&q=80'
+    }
+  ];
+
+  const filteredNews = selectedCategory === 'all' 
+    ? newsArticles 
+    : newsArticles.filter(article => article.category === selectedCategory);
+
+  const featuredArticle = newsArticles[0];
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="border-b border-gray-200 sticky top-0 bg-white z-50">
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-7 h-7 text-gray-900" />
+              <h1 className="text-2xl font-bold text-gray-900">경제알리미</h1>
+            </div>
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-8">
+              <a href="#" className="text-sm text-gray-700 hover:text-gray-900">홈</a>
+              <a href="#" className="text-sm text-gray-700 hover:text-gray-900">뉴스</a>
+              <a href="#" className="text-sm text-gray-700 hover:text-gray-900">학습</a>
+              <a href="#" className="text-sm text-gray-700 hover:text-gray-900">용어사전</a>
+            </nav>
+
+            {/* Mobile Menu Button */}
+            <button 
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <nav className="md:hidden mt-4 pb-4 flex flex-col gap-3">
+              <a href="#" className="text-sm text-gray-700">홈</a>
+              <a href="#" className="text-sm text-gray-700">뉴스</a>
+              <a href="#" className="text-sm text-gray-700">학습</a>
+              <a href="#" className="text-sm text-gray-700">용어사전</a>
+            </nav>
+          )}
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-6xl mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <section className="mb-12">
+          <h2 className="text-sm font-medium text-gray-500 mb-2">TODAY'S HEADLINE</h2>
+          <div className="bg-gray-50 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+            <div className="md:flex">
+              <div className="md:w-2/5">
+                <img 
+                  src={featuredArticle.image} 
+                  alt={featuredArticle.title}
+                  className="w-full h-64 md:h-full object-cover"
+                />
+              </div>
+              <div className="p-6 md:w-3/5 flex flex-col justify-center">
+                <span className="inline-block px-3 py-1 bg-gray-900 text-white text-xs rounded-full w-fit mb-3">
+                  주요뉴스
+                </span>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3 leading-tight">
+                  {featuredArticle.title}
+                </h3>
+                <p className="text-gray-600 mb-4 leading-relaxed">
+                  {featuredArticle.summary}
+                </p>
+                <div className="flex items-center gap-4 text-sm text-gray-500">
+                  <span>{featuredArticle.source}</span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    {featuredArticle.time}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Category Filter */}
+        <section className="mb-8">
+          <div className="flex gap-3 overflow-x-auto pb-2">
+            {categories.map(category => (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                  selectedCategory === category.id
+                    ? 'bg-gray-900 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {category.name}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* News Grid */}
+        <section>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredNews.slice(1).map(article => (
+              <article 
+                key={article.id}
+                className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              >
+                <img 
+                  src={article.image} 
+                  alt={article.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-5">
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded mb-3">
+                    {categories.find(c => c.id === article.category)?.name}
+                  </span>
+                  <h4 className="font-bold text-gray-900 mb-2 leading-snug line-clamp-2">
+                    {article.title}
+                  </h4>
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                    {article.summary}
+                  </p>
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <span>{article.source}</span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {article.time}
+                    </span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* Learning Section */}
+        <section className="mt-16 bg-gray-50 rounded-lg p-8">
+          <div className="flex items-center gap-2 mb-6">
+            <BookOpen className="w-6 h-6 text-gray-900" />
+            <h3 className="text-xl font-bold text-gray-900">경제 용어 학습</h3>
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="bg-white p-5 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+              <h4 className="font-bold text-gray-900 mb-2">기준금리란?</h4>
+              <p className="text-sm text-gray-600 mb-3">중앙은행이 금융기관과 거래할 때 적용하는 기준이 되는 금리입니다.</p>
+              <div className="flex items-center text-sm text-gray-900 font-medium">
+                자세히 보기 <ChevronRight className="w-4 h-4 ml-1" />
+              </div>
+            </div>
+            <div className="bg-white p-5 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+              <h4 className="font-bold text-gray-900 mb-2">인플레이션</h4>
+              <p className="text-sm text-gray-600 mb-3">물가가 지속적으로 상승하여 화폐 가치가 하락하는 경제 현상입니다.</p>
+              <div className="flex items-center text-sm text-gray-900 font-medium">
+                자세히 보기 <ChevronRight className="w-4 h-4 ml-1" />
+              </div>
+            </div>
+            <div className="bg-white p-5 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+              <h4 className="font-bold text-gray-900 mb-2">GDP</h4>
+              <p className="text-sm text-gray-600 mb-3">국내총생산으로, 일정 기간 국내에서 생산된 모든 재화와 서비스의 가치입니다.</p>
+              <div className="flex items-center text-sm text-gray-900 font-medium">
+                자세히 보기 <ChevronRight className="w-4 h-4 ml-1" />
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-200 mt-16 py-8 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-gray-600" />
+              <span className="text-sm text-gray-600">© 2025 경제알리미. All rights reserved.</span>
+            </div>
+            <div className="flex gap-6 text-sm text-gray-600">
+              <a href="#" className="hover:text-gray-900">이용약관</a>
+              <a href="#" className="hover:text-gray-900">개인정보처리방침</a>
+              <a href="#" className="hover:text-gray-900">문의하기</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
